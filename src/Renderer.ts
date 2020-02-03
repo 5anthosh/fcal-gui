@@ -18,18 +18,10 @@ $("#expression").on("change keydown paste input", function() {
   if (typeof exprVal === "string") {
     expression = exprVal;
   }
+  localStorage.setItem(localStorageKey, expression);
   main(expression);
 });
 
-$("#save").click(function() {
-  localStorage.setItem(localStorageKey, expression);
-});
-
-$("#default").click(function() {
-  $("#expression").val(defaultExpression);
-  expression = defaultExpression;
-  main(defaultExpression);
-});
 
 $(window).on("load", function() {
   var value = localStorage.getItem(localStorageKey);

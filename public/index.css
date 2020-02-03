@@ -1,0 +1,65 @@
+    .parent {
+        font-size: 16px;
+        font-family: monospace;
+        display: grid;
+        margin-left: 20px;
+        grid-template-columns: 250px 500px;
+        grid-template-rows: 100%;
+        grid-column-gap: 25px;
+        grid-row-gap: px;
+    }
+
+    #save {
+        background: #6aa84f;
+        border-radius: 5px;
+        padding: 8px 20px;
+        color: #ffffff;
+        display: inline-block;
+        font: normal bold 16px/1 "Ubuntu",
+            sans-serif;
+        text-align: center;
+    }
+
+    #default {
+        background: #3d85c6;
+        border-radius: 5px;
+        padding: 8px 20px;
+        color: #ffffff;
+        display: inline-block;
+        font: normal bold 16px/1 "Ubuntu",
+            sans-serif;
+        text-align: center;
+    }
+
+    .input {
+        border: none;
+        outline: none;
+        height: 100%;
+        background: transparent;
+        resize: none;
+        width: 100%;
+    }
+
+    textarea {
+        font-size: 16px;
+        font-family: monospace;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 50px 1fr;
+        grid-template-areas: "Toolbar""Body";
+    }
+
+    .Toolbar {
+        grid-area: Toolbar;
+    }
+
+    .Body {
+        display: grid;
+        grid-template-columns: 400px 1fr;
+        grid-template-rows: 1fr;
+        grid-template-areas: "Expression resultValues";
+        grid-area: Body;
+    }

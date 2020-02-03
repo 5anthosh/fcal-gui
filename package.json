@@ -1,0 +1,21 @@
+{
+  "name": "fcal-gui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app/App.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron app/App.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jquery": "^3.3.31"
+  },
+  "dependencies": {
+    "electron": "^7.1.11",
+    "fcal": "^0.4.1",
+    "jquery": "^3.4.1"
+  }
+}

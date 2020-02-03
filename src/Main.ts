@@ -1,4 +1,5 @@
 import { BrowserWindow } from "electron";
+import path from "path";
 
 export default class Main {
   static mainWindow: Electron.BrowserWindow;
@@ -18,7 +19,8 @@ export default class Main {
       height: 600,
       resizable: false,
       frame: true,
-      webPreferences: { nodeIntegration: true }
+      webPreferences: { nodeIntegration: true },
+      icon: path.join(__dirname, "/../public/fcal.png")
     });
     Main.mainWindow.webContents.loadFile(__dirname + "/../public/index.html");
     Main.mainWindow.on("closed", Main.onClose);

@@ -20,9 +20,10 @@ export default class Main {
       resizable: false,
       frame: true,
       webPreferences: { nodeIntegration: true },
-      icon: path.join(__dirname, "/../public/fcal.png")
+      icon: path.join(__dirname, "build", "icons", "icon.png"),
     });
-    Main.mainWindow.webContents.loadFile(__dirname + "/../public/index.html");
+    Main.mainWindow.setMenu(null);
+    Main.mainWindow.webContents.loadFile(__dirname + "/index.html");
     Main.mainWindow.on("closed", Main.onClose);
   }
 

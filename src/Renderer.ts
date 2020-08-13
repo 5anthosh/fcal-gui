@@ -7,7 +7,7 @@ let defaultExpression =
         \n200 sec + 120 % \n \n20 minutes + 34 day in sec \n \nsin(PI) \n \nE \n \nspeed = 20 kph \n \nspeed in mps";
 let expression = "0";
 
-$("#expression").on("change keydown paste input", function() {
+$("#expression").on("change keydown paste input", function () {
   const expr = $(this);
   let exprVal = expr.val();
   if (exprVal === undefined) {
@@ -22,8 +22,7 @@ $("#expression").on("change keydown paste input", function() {
   main(expression);
 });
 
-
-$(window).on("load", function() {
+$(window).on("load", function () {
   var value = localStorage.getItem(localStorageKey);
   if (!value) {
     value = defaultExpression;
@@ -64,8 +63,8 @@ function evaluate(source: string, fcalEngine: Fcal): HTMLParagraphElement {
     p.style.color = "green";
     p.textContent = "# " + fcalEngine.evaluate(source);
   } catch (error) {
-    p.style.color = "red";
-    p.textContent = "x " + error.message;
+    // p.style.color = "red";
+    // p.textContent = "x " + error.message;
   }
   return p;
 }

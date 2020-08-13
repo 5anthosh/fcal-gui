@@ -1,21 +1,61 @@
 {
-  "name": "fcal-gui",
-  "version": "1.0.0",
+  "name": "fcal",
+  "productName": "fcal",
+  "version": "0.0.1",
   "description": "",
   "main": "app/App.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron app/App.js"
+    "compile": "tsc -p .",
+    "start": "electron app/App.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --macos --linux --windows --publish always"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Santhosh Kumar R",
+    "email": "santhoshkumarr1096@gmail.com"
+  },
   "license": "ISC",
   "devDependencies": {
-    "@types/jquery": "^3.3.31"
+    "@types/jquery": "^3.3.31",
+    "electron-builder": "^22.8.0",
+    "electron": "^7.3.2",
+    "typescript": "^3.9.7"
   },
   "dependencies": {
-    "electron": "^7.1.11",
-    "fcal": "^0.4.1",
+    "fcal": "^0.4.2",
     "jquery": "^3.4.1"
+  },
+  "build": {
+    "appId": "com.santhosh.fcal",
+    "mac": {
+      "category": "public.app-category.utility"
+    },
+    "dmg": {
+      "iconSize": 160,
+      "icon": "app/build/icons/icon.png",
+      "contents": [
+        {
+          "x": 180,
+          "y": 170
+        },
+        {
+          "x": 480,
+          "y": 170,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "icon": "app/build/icons/icon.png",
+      "target": [
+        "deb"
+      ],
+      "category": "Utility"
+    },
+    "win": {
+      "icon": "app/build/icons/icon.png"
+    }
   }
 }

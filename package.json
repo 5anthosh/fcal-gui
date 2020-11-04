@@ -1,14 +1,14 @@
 {
   "name": "fcal",
-  "productName": "fcal",
+  "productName": "Fcal",
   "version": "0.0.1",
-  "description": "",
+  "description": "Open source calculator",
   "main": "app/App.js",
   "scripts": {
     "compile": "tsc -p .",
     "start": "electron app/App.js",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder --macos --linux --windows --publish always"
+    "dist": "electron-builder --linux --windows --publish always"
   },
   "keywords": [],
   "author": {
@@ -28,25 +28,6 @@
   },
   "build": {
     "appId": "com.santhosh.fcal",
-    "mac": {
-      "category": "public.app-category.utility"
-    },
-    "dmg": {
-      "iconSize": 160,
-      "icon": "app/build/icons/icon.png",
-      "contents": [
-        {
-          "x": 180,
-          "y": 170
-        },
-        {
-          "x": 480,
-          "y": 170,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    },
     "linux": {
       "icon": "app/build/icons/icon.png",
       "target": [
@@ -55,7 +36,7 @@
       "category": "Utility"
     },
     "win": {
-      "icon": "app/build/icons/icon.png"
+      "icon": "app/build/icons/icon.ico"
     }
   }
 }

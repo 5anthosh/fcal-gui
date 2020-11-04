@@ -22,7 +22,7 @@ export default class Main {
       webPreferences: { nodeIntegration: true },
       icon: path.join(__dirname, "build", "icons", "icon.png"),
     });
-    Main.mainWindow.setMenu(null);
+   // Main.mainWindow.setMenu(null);
     Main.mainWindow.webContents.loadFile(__dirname + "/index.html");
     Main.mainWindow.on("closed", Main.onClose);
   }

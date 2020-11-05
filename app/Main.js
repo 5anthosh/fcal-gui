@@ -18,7 +18,7 @@ class Main {
             resizable: false,
             frame: true,
             webPreferences: { nodeIntegration: true },
-            icon: path_1.default.join(__dirname, "build", "icons", "icon.svg"),
+            icon: path_1.default.join(__dirname, "build", "icons", "icon.png"),
         });
         // Main.mainWindow.setMenu(null);
         Main.mainWindow.webContents.loadFile(__dirname + "/index.html");

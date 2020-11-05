@@ -5,7 +5,7 @@
   "description": "Open source calculator",
   "main": "app/App.js",
   "scripts": {
-    "compile": "tsc -p .",
+    "build": "tsc -p .",
     "start": "electron app/App.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder --linux --windows --publish always"

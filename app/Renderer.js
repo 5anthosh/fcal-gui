@@ -6,21 +6,45 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jquery_1 = __importDefault(require("jquery"));
 const fcal_1 = require("fcal");
 const localStorageKey = "fcal-playground";
-let defaultExpression = "radius : 23\nPI * radius ^ 2 \nPI2 * radius \n\nlog(23) \n \n23 % of 1023 \n \
-        \n200 sec + 120 % \n \n20 minutes + 34 day in sec \n \nsin(PI) \n \nE \n \nspeed = 20 kph \n \nspeed in mps";
+let expressions = [
+    "radius : 23 cm",
+    "PI * radius ^ 2",
+    "PI2 * radius",
+    "log(23)",
+    "23 % of 1023",
+    "200 sec + 120 %",
+    "20 minutes + 34 day in sec",
+    "sin(PI)",
+    "E",
+    "speed = 20 kph",
+    "speed in mps",
+];
+let defaultExpression = (() => {
+    let val = "";
+    for (const expression of expressions) {
+        val = `${val}<div>${expression}</div><div></br></div>`;
+    }
+    return val;
+})();
 let expression = "0";
+jquery_1.default("#expression").on("focusout", function () {
+    //console.log("Focus out");
+    const element = jquery_1.default(this);
+    if (!element.text().trim().length) {
+        element.empty();
+    }
+});
 jquery_1.default("#expression").on("change keydown paste input", function () {
+    // console.log("change");
     const expr = jquery_1.default(this);
-    let exprVal = expr.val();
-    if (exprVal === undefined) {
-        expression = expr.text();
-        exprVal = expression;
+    const contents = expr.contents();
+    localStorage.setItem(localStorageKey, expr.html());
+    main(contents);
+});
+jquery_1.default("#expression").on("keydown", (event) => {
+    if (event.ctrlKey) {
+        event.preventDefault();
     }
-    if (typeof exprVal === "string") {
-        expression = exprVal;
-    }
-    localStorage.setItem(localStorageKey, expression);
-    main(expression);
 });
 jquery_1.default(window).on("load", function () {
     var value = localStorage.getItem(localStorageKey);
@@ -28,20 +52,51 @@ jquery_1.default(window).on("load", function () {
         value = defaultExpression;
     }
     expression = value;
-    jquery_1.default("#expression").text(value);
-    main(value);
+    jquery_1.default("#expression").html(value);
+    main(jquery_1.default("#expression").contents());
 });
-function main(input) {
-    const values = input.split("\n");
+function main(values) {
     var fcalEngine = new fcal_1.Fcal();
     var result = jquery_1.default("#value");
     result.empty();
     for (const value of values) {
-        result.append(evaluate(value, fcalEngine));
-        const count = Math.ceil(value.length / 30);
-        for (let index1 = 2; index1 <= count; index1++) {
+        //console.log(value);
+        if (value instanceof HTMLElement) {
+            if (value.nodeName === "DIV") {
+                const content = value.textContent;
+                if (content && content.trim().length > 0) {
+                    value;
+                    result.append(evaluate(content, fcalEngine));
+                    addExtraLine(content, result);
+                }
+                else {
+                    result.append(resultView());
+                }
+            }
+            else {
+                result.append(resultView());
+            }
+        }
+        else if (value instanceof Text) {
+            const content = value.textContent;
+            if (content && content.trim().length > 0) {
+                result.append(evaluate(content, fcalEngine));
+                addExtraLine(content, result);
+            }
+            else {
+                result.append(resultView());
+            }
+        }
+        else {
             result.append(resultView());
         }
+    }
+}
+function findText(el) { }
+function addExtraLine(value, result) {
+    const count = Math.ceil(value.length / 41);
+    for (let index = 2; index <= count; index++) {
+        result.append(resultView());
     }
 }
 function resultView() {
@@ -58,7 +113,7 @@ function evaluate(source, fcalEngine) {
     }
     try {
         p.style.color = "green";
-        p.textContent = "# " + fcalEngine.evaluate(source);
+        p.textContent = fcalEngine.evaluate(source).toString();
     }
     catch (error) {
         // p.style.color = "red";

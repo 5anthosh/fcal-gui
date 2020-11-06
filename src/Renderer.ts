@@ -1,7 +1,7 @@
 import $, { event } from "jquery";
-import { Fcal } from "fcal";
+import Fcal from "./Fcal";
+import { localStorageKeyExpr } from "./constants";
 
-const localStorageKey = "fcal-playground";
 const expressionEL = $("#expression");
 const resultEL = $("#value");
 
@@ -39,18 +39,22 @@ expressionEL.on("focusout", function () {
 expressionEL.on("change keydown paste input", function () {
   const expr = $(this);
   const contents = expr.contents();
-  localStorage.setItem(localStorageKey, expr.html());
+  localStorage.setItem(localStorageKeyExpr, expr.html());
   main(contents);
 });
 
 expressionEL.on("keydown", (event) => {
-  if (event.ctrlKey) {
+  if (
+    event.ctrlKey &&
+    !(event.keyCode === 67 || event.keyCode === 65 || event.keyCode === 86)
+  ) {
+    console.log(event.key, event, event.keyCode);
     event.preventDefault();
   }
 });
 
 $(window).on("load", function () {
-  var value = localStorage.getItem(localStorageKey);
+  var value = localStorage.getItem(localStorageKeyExpr);
   if (!value) {
     value = defaultExpression;
   }
@@ -60,12 +64,18 @@ $(window).on("load", function () {
 });
 
 function main(values: JQuery<HTMLElement | Text | Comment | Document>) {
-  var fcalEngine = new Fcal();
   resultEL.empty();
+  const fcalEngime = new Fcal();
+  generate(values, fcalEngime);
+}
+function generate(
+  values: JQuery<HTMLElement | Text | Comment | Document>,
+  fcalEngine: Fcal
+) {
   for (const value of values) {
     if (value instanceof HTMLElement) {
       if (value.nodeName === "DIV") {
-        populateResult(value, fcalEngine);
+        generate($(value).contents(), fcalEngine);
       } else {
         resultEL.append(resultView());
       }
@@ -91,7 +101,7 @@ function populateResult(
 ) {
   const content = value.textContent;
   if (content && content.trim().length > 0) {
-    value;
+    // console.log(Fcal.getTokensForExpression(content.trim()));
     resultEL.append(evaluate(content.trim(), fcalEngine));
     addExtraLine(content);
   } else {
@@ -112,11 +122,7 @@ function evaluate(source: string, fcalEngine: Fcal): HTMLParagraphElement {
     return p;
   }
   try {
-    p.style.color = "green";
     p.textContent = fcalEngine.evaluate(source).toString();
-  } catch (error) {
-    // p.style.color = "red";
-    // p.textContent = "x " + error.message;
-  }
+  } catch (error) {}
   return p;
 }

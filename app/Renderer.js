@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jquery_1 = __importDefault(require("jquery"));
-const fcal_1 = require("fcal");
-const localStorageKey = "fcal-playground";
+const Fcal_1 = __importDefault(require("./Fcal"));
+const constants_1 = require("./constants");
 const expressionEL = jquery_1.default("#expression");
 const resultEL = jquery_1.default("#value");
 let expressions = [
@@ -38,16 +38,18 @@ expressionEL.on("focusout", function () {
 expressionEL.on("change keydown paste input", function () {
     const expr = jquery_1.default(this);
     const contents = expr.contents();
-    localStorage.setItem(localStorageKey, expr.html());
+    localStorage.setItem(constants_1.localStorageKeyExpr, expr.html());
     main(contents);
 });
 expressionEL.on("keydown", (event) => {
-    if (event.ctrlKey) {
+    if (event.ctrlKey &&
+        !(event.keyCode === 67 || event.keyCode === 65 || event.keyCode === 86)) {
+        console.log(event.key, event, event.keyCode);
         event.preventDefault();
     }
 });
 jquery_1.default(window).on("load", function () {
-    var value = localStorage.getItem(localStorageKey);
+    var value = localStorage.getItem(constants_1.localStorageKeyExpr);
     if (!value) {
         value = defaultExpression;
     }
@@ -56,12 +58,15 @@ jquery_1.default(window).on("load", function () {
     main(expressionEL.contents());
 });
 function main(values) {
-    var fcalEngine = new fcal_1.Fcal();
     resultEL.empty();
+    const fcalEngime = new Fcal_1.default();
+    generate(values, fcalEngime);
+}
+function generate(values, fcalEngine) {
     for (const value of values) {
         if (value instanceof HTMLElement) {
             if (value.nodeName === "DIV") {
-                populateResult(value, fcalEngine);
+                generate(jquery_1.default(value).contents(), fcalEngine);
             }
             else {
                 resultEL.append(resultView());
@@ -85,7 +90,7 @@ function addExtraLine(value) {
 function populateResult(value, fcalEngine) {
     const content = value.textContent;
     if (content && content.trim().length > 0) {
-        value;
+        // console.log(Fcal.getTokensForExpression(content.trim()));
         resultEL.append(evaluate(content.trim(), fcalEngine));
         addExtraLine(content);
     }
@@ -106,12 +111,8 @@ function evaluate(source, fcalEngine) {
         return p;
     }
     try {
-        p.style.color = "green";
         p.textContent = fcalEngine.evaluate(source).toString();
     }
-    catch (error) {
-        // p.style.color = "red";
-        // p.textContent = "x " + error.message;
-    }
+    catch (error) { }
     return p;
 }

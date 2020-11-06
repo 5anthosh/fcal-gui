@@ -8,7 +8,7 @@
         grid-column-gap: 25px;
         grid-row-gap: px;
     }
-
+/* 
     #save {
         background: #6aa84f;
         border-radius: 5px;
@@ -29,9 +29,10 @@
         font: normal bold 16px/1 "Ubuntu",
             sans-serif;
         text-align: center;
-    }
+    } */
 
     .input {
+        color: #ffd631;
         border: none;
         outline: none;
         height: 100%;
@@ -71,4 +72,12 @@
 
     [placeholder]:empty:focus::before {
         content: "";
+    }
+
+    .resultValues {
+        color: #00ff76;
+    }
+
+    .WholeWindow {
+        background-color: #202646;
     }

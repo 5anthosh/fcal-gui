@@ -18,13 +18,15 @@
   "license": "ISC",
   "devDependencies": {
     "@types/jquery": "^3.3.31",
-    "electron-builder": "^22.8.0",
+    "@types/node-fetch": "^2.5.7",
     "electron": "^7.3.2",
+    "electron-builder": "^22.8.0",
     "typescript": "^3.9.7"
   },
   "dependencies": {
     "fcal": "^0.4.2",
-    "jquery": "^3.4.1"
+    "jquery": "^3.4.1",
+    "node-fetch": "^2.6.1"
   },
   "build": {
     "appId": "com.santhosh.fcal",

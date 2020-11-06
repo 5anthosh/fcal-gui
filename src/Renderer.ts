@@ -27,8 +27,6 @@ let defaultExpression = (() => {
   return val;
 })();
 
-let expression = "0";
-
 expressionEL.on("focusout", function () {
   const element = $(this);
   if (!element.text().trim().length) {
@@ -58,16 +56,16 @@ $(window).on("load", function () {
   if (!value) {
     value = defaultExpression;
   }
-  expression = value;
   expressionEL.html(value);
   main(expressionEL.contents());
 });
 
 function main(values: JQuery<HTMLElement | Text | Comment | Document>) {
   resultEL.empty();
-  const fcalEngime = new Fcal();
-  generate(values, fcalEngime);
+  const fcalEngine = new Fcal();
+  generate(values, fcalEngine);
 }
+
 function generate(
   values: JQuery<HTMLElement | Text | Comment | Document>,
   fcalEngine: Fcal
@@ -101,7 +99,6 @@ function populateResult(
 ) {
   const content = value.textContent;
   if (content && content.trim().length > 0) {
-    // console.log(Fcal.getTokensForExpression(content.trim()));
     resultEL.append(evaluate(content.trim(), fcalEngine));
     addExtraLine(content);
   } else {

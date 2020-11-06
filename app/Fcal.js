@@ -2,12 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fcal_1 = require("fcal");
 const Rates_1 = require("./Rates");
-function setERUnits() {
-    const value = Rates_1.getER();
-    if (!value) {
-        return;
-    }
-    const rates = value["rates"];
+function setUnitsInFcal(ratesObj) {
+    const rates = ratesObj["rates"];
     const ID = "CURRENCY";
     const ONE = new fcal_1.Decimal(1);
     fcal_1.Fcal.UseUnit(new fcal_1.Unit(ID, 1, "USD", ["USD", "$"]));
@@ -43,6 +39,20 @@ function setERUnits() {
     fcal_1.Fcal.UseUnit(new fcal_1.Unit(ID, ONE.div(new fcal_1.Decimal(rates["ILS"])), "ILS", ["ILS"]));
     fcal_1.Fcal.UseUnit(new fcal_1.Unit(ID, ONE.div(new fcal_1.Decimal(rates["KRW"])), "KRW", ["KRW"]));
     fcal_1.Fcal.UseUnit(new fcal_1.Unit(ID, ONE.div(new fcal_1.Decimal(rates["PLN"])), "PLN", ["PLN"]));
+}
+function setERUnits() {
+    const value = Rates_1.getER();
+    if (value instanceof Promise) {
+        value.then((value) => {
+            console.log(value);
+            setUnitsInFcal(value);
+        }, (e) => {
+            console.log(e);
+        });
+    }
+    else {
+        setUnitsInFcal(value);
+    }
 }
 setERUnits();
 exports.default = fcal_1.Fcal;

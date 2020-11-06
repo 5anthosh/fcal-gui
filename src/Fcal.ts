@@ -1,12 +1,8 @@
 import { Decimal, Fcal, Unit } from "fcal";
 import { getER } from "./Rates";
 
-function setERUnits() {
-  const value = getER();
-  if (!value) {
-    return;
-  }
-  const rates = value["rates"];
+function setUnitsInFcal(ratesObj: Object) {
+  const rates = ratesObj["rates"];
   const ID = "CURRENCY";
   const ONE = new Decimal(1);
   Fcal.UseUnit(new Unit(ID, 1, "USD", ["USD", "$"]));
@@ -106,6 +102,22 @@ function setERUnits() {
   Fcal.UseUnit(
     new Unit(ID, ONE.div(new Decimal(rates["PLN"])), "PLN", ["PLN"])
   );
+}
+function setERUnits() {
+  const value = getER();
+  if (value instanceof Promise) {
+    value.then(
+      (value: Object) => {
+        console.log(value);
+        setUnitsInFcal(value);
+      },
+      (e: Error) => {
+        console.log(e);
+      }
+    );
+  } else {
+    setUnitsInFcal(value);
+  }
 }
 
 setERUnits();

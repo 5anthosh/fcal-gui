@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jquery_1 = __importDefault(require("jquery"));
 const fcal_1 = require("fcal");
 const localStorageKey = "fcal-playground";
+const expressionEL = jquery_1.default("#expression");
+const resultEL = jquery_1.default("#value");
 let expressions = [
     "radius : 23 cm",
     "PI * radius ^ 2",
@@ -27,21 +29,19 @@ let defaultExpression = (() => {
     return val;
 })();
 let expression = "0";
-jquery_1.default("#expression").on("focusout", function () {
-    //console.log("Focus out");
+expressionEL.on("focusout", function () {
     const element = jquery_1.default(this);
     if (!element.text().trim().length) {
         element.empty();
     }
 });
-jquery_1.default("#expression").on("change keydown paste input", function () {
-    // console.log("change");
+expressionEL.on("change keydown paste input", function () {
     const expr = jquery_1.default(this);
     const contents = expr.contents();
     localStorage.setItem(localStorageKey, expr.html());
     main(contents);
 });
-jquery_1.default("#expression").on("keydown", (event) => {
+expressionEL.on("keydown", (event) => {
     if (event.ctrlKey) {
         event.preventDefault();
     }
@@ -52,51 +52,45 @@ jquery_1.default(window).on("load", function () {
         value = defaultExpression;
     }
     expression = value;
-    jquery_1.default("#expression").html(value);
-    main(jquery_1.default("#expression").contents());
+    expressionEL.html(value);
+    main(expressionEL.contents());
 });
 function main(values) {
     var fcalEngine = new fcal_1.Fcal();
-    var result = jquery_1.default("#value");
-    result.empty();
+    resultEL.empty();
     for (const value of values) {
-        //console.log(value);
         if (value instanceof HTMLElement) {
             if (value.nodeName === "DIV") {
-                const content = value.textContent;
-                if (content && content.trim().length > 0) {
-                    value;
-                    result.append(evaluate(content, fcalEngine));
-                    addExtraLine(content, result);
-                }
-                else {
-                    result.append(resultView());
-                }
+                populateResult(value, fcalEngine);
             }
             else {
-                result.append(resultView());
+                resultEL.append(resultView());
             }
         }
         else if (value instanceof Text) {
-            const content = value.textContent;
-            if (content && content.trim().length > 0) {
-                result.append(evaluate(content, fcalEngine));
-                addExtraLine(content, result);
-            }
-            else {
-                result.append(resultView());
-            }
+            populateResult(value, fcalEngine);
         }
         else {
-            result.append(resultView());
+            resultEL.append(resultView());
         }
     }
 }
 function findText(el) { }
-function addExtraLine(value, result) {
+function addExtraLine(value) {
     const count = Math.ceil(value.length / 41);
     for (let index = 2; index <= count; index++) {
-        result.append(resultView());
+        resultEL.append(resultView());
+    }
+}
+function populateResult(value, fcalEngine) {
+    const content = value.textContent;
+    if (content && content.trim().length > 0) {
+        value;
+        resultEL.append(evaluate(content.trim(), fcalEngine));
+        addExtraLine(content);
+    }
+    else {
+        resultEL.append(resultView());
     }
 }
 function resultView() {

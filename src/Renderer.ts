@@ -2,6 +2,9 @@ import $, { event } from "jquery";
 import { Fcal } from "fcal";
 
 const localStorageKey = "fcal-playground";
+const expressionEL = $("#expression");
+const resultEL = $("#value");
+
 let expressions = [
   "radius : 23 cm",
   "PI * radius ^ 2",
@@ -26,23 +29,21 @@ let defaultExpression = (() => {
 
 let expression = "0";
 
-$("#expression").on("focusout", function () {
-  //console.log("Focus out");
+expressionEL.on("focusout", function () {
   const element = $(this);
   if (!element.text().trim().length) {
     element.empty();
   }
 });
 
-$("#expression").on("change keydown paste input", function () {
-  // console.log("change");
+expressionEL.on("change keydown paste input", function () {
   const expr = $(this);
   const contents = expr.contents();
   localStorage.setItem(localStorageKey, expr.html());
   main(contents);
 });
 
-$("#expression").on("keydown", (event) => {
+expressionEL.on("keydown", (event) => {
   if (event.ctrlKey) {
     event.preventDefault();
   }
@@ -54,51 +55,49 @@ $(window).on("load", function () {
     value = defaultExpression;
   }
   expression = value;
-  $("#expression").html(value);
-  main($("#expression").contents());
+  expressionEL.html(value);
+  main(expressionEL.contents());
 });
 
 function main(values: JQuery<HTMLElement | Text | Comment | Document>) {
   var fcalEngine = new Fcal();
-  var result = $("#value");
-  result.empty();
+  resultEL.empty();
   for (const value of values) {
-    //console.log(value);
     if (value instanceof HTMLElement) {
       if (value.nodeName === "DIV") {
-        const content = value.textContent;
-        if (content && content.trim().length > 0) {
-          value;
-          result.append(evaluate(content, fcalEngine));
-          addExtraLine(content, result);
-        } else {
-          result.append(resultView());
-        }
+        populateResult(value, fcalEngine);
       } else {
-        result.append(resultView());
+        resultEL.append(resultView());
       }
     } else if (value instanceof Text) {
-      const content = value.textContent;
-      if (content && content.trim().length > 0) {
-        result.append(evaluate(content, fcalEngine));
-        addExtraLine(content, result);
-      } else {
-        result.append(resultView());
-      }
+      populateResult(value, fcalEngine);
     } else {
-      result.append(resultView());
+      resultEL.append(resultView());
     }
   }
 }
 
 function findText(el: JQuery<HTMLElement>) {}
-function addExtraLine(value: string, result: JQuery<HTMLElement>) {
+function addExtraLine(value: string) {
   const count = Math.ceil(value.length / 41);
   for (let index = 2; index <= count; index++) {
-    result.append(resultView());
+    resultEL.append(resultView());
   }
 }
 
+function populateResult(
+  value: HTMLElement | Text | Comment | Document,
+  fcalEngine: Fcal
+) {
+  const content = value.textContent;
+  if (content && content.trim().length > 0) {
+    value;
+    resultEL.append(evaluate(content.trim(), fcalEngine));
+    addExtraLine(content);
+  } else {
+    resultEL.append(resultView());
+  }
+}
 function resultView(): HTMLParagraphElement {
   const p = document.createElement("p");
   p.style.marginTop = "0px";

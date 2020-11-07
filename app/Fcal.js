@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fcal_1 = require("fcal");
+const node_fetch_1 = require("node-fetch");
 const Rates_1 = require("./Rates");
 function setUnitsInFcal(ratesObj) {
     console.info("Setting currency units to fcal");
@@ -48,7 +49,13 @@ function setERUnits() {
             console.log(value);
             setUnitsInFcal(value);
         }, (e) => {
-            console.log(e);
+            if (e instanceof node_fetch_1.FetchError) {
+                if (e.code && e.code === "EAI_AGAIN") {
+                    alert(`Could not get currency rates, so currency conversion is disabled.
+Check your internet connection`);
+                }
+            }
+            console.error(e);
         });
     }
     else {

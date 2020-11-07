@@ -1,4 +1,5 @@
 import { Decimal, Fcal, Unit } from "fcal";
+import { FetchError } from "node-fetch";
 import { getER } from "./Rates";
 
 function setUnitsInFcal(ratesObj: Object) {
@@ -113,7 +114,15 @@ function setERUnits() {
         setUnitsInFcal(value);
       },
       (e: Error) => {
-        console.log(e);
+        if (e instanceof FetchError) {
+          if (e.code && e.code === "EAI_AGAIN") {
+            alert(
+              `Could not get currency rates, so currency conversion is disabled.
+Check your internet connection`
+            );
+          }
+        }
+        console.error(e);
       }
     );
   } else {

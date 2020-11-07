@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jquery_1 = __importDefault(require("jquery"));
 const Fcal_1 = __importDefault(require("./Fcal"));
 const constants_1 = require("./constants");
+const fcal_1 = require("fcal");
 const expressionEL = jquery_1.default("#expression");
 const resultEL = jquery_1.default("#value");
 let expressions = [
@@ -69,12 +70,7 @@ function generate(values, fcalEngine) {
         if (value instanceof HTMLElement) {
             if (value.nodeName === "DIV") {
                 if (value.childNodes.length > 1) {
-                    if (jquery_1.default(value).has("div").length > 0) {
-                        generateInDIV(jquery_1.default(value).contents(), fcalEngine);
-                    }
-                    else {
-                        populateResult(getInnerText(value), fcalEngine);
-                    }
+                    jumpInDIv(value, fcalEngine);
                 }
                 else {
                     populateResult(getInnerText(value), fcalEngine);
@@ -96,12 +92,7 @@ function generateInDIV(values, fcalEngine) {
     for (const value of values) {
         if (value instanceof HTMLElement) {
             if (value.nodeName === "DIV") {
-                if (jquery_1.default(value).has("div").length > 0) {
-                    generateInDIV(jquery_1.default(value).contents(), fcalEngine);
-                }
-                else {
-                    populateResult(getInnerText(value), fcalEngine);
-                }
+                jumpInDIv(value, fcalEngine);
             }
             else if (value.nodeName === "SPAN") {
                 populateResult(getInnerText(value), fcalEngine);
@@ -110,6 +101,14 @@ function generateInDIV(values, fcalEngine) {
         else if (value instanceof Text) {
             populateResult(value, fcalEngine);
         }
+    }
+}
+function jumpInDIv(value, fcalEngine) {
+    if (jquery_1.default(value).has("div").length > 0) {
+        generateInDIV(jquery_1.default(value).contents(), fcalEngine);
+    }
+    else {
+        populateResult(getInnerText(value), fcalEngine);
     }
 }
 function getInnerText(value) {
@@ -152,6 +151,13 @@ function evaluate(source, fcalEngine) {
     try {
         p.textContent = fcalEngine.evaluate(source).toString();
     }
-    catch (error) { }
+    catch (error) {
+        if (error instanceof fcal_1.FcalError) {
+            console.info(error.info());
+        }
+        else {
+            console.error(error);
+        }
+    }
     return p;
 }

@@ -1,6 +1,7 @@
 import $ from "jquery";
 import Fcal from "./Fcal";
 import { localStorageKeyExpr } from "./constants";
+import { FcalError } from "fcal";
 
 const expressionEL = $("#expression");
 const resultEL = $("#value");
@@ -80,11 +81,7 @@ function generate(
     if (value instanceof HTMLElement) {
       if (value.nodeName === "DIV") {
         if (value.childNodes.length > 1) {
-          if ($(value).has("div").length > 0) {
-            generateInDIV($(value).contents(), fcalEngine);
-          } else {
-            populateResult(getInnerText(value), fcalEngine);
-          }
+          jumpInDIv(value, fcalEngine);
         } else {
           populateResult(getInnerText(value), fcalEngine);
         }
@@ -106,17 +103,21 @@ function generateInDIV(
   for (const value of values) {
     if (value instanceof HTMLElement) {
       if (value.nodeName === "DIV") {
-        if ($(value).has("div").length > 0) {
-          generateInDIV($(value).contents(), fcalEngine);
-        } else {
-          populateResult(getInnerText(value), fcalEngine);
-        }
+        jumpInDIv(value, fcalEngine);
       } else if (value.nodeName === "SPAN") {
         populateResult(getInnerText(value), fcalEngine);
       }
     } else if (value instanceof Text) {
       populateResult(value, fcalEngine);
     }
+  }
+}
+
+function jumpInDIv(value: HTMLElement, fcalEngine: Fcal) {
+  if ($(value).has("div").length > 0) {
+    generateInDIV($(value).contents(), fcalEngine);
+  } else {
+    populateResult(getInnerText(value), fcalEngine);
   }
 }
 
@@ -163,6 +164,12 @@ function evaluate(source: string, fcalEngine: Fcal): HTMLParagraphElement {
   }
   try {
     p.textContent = fcalEngine.evaluate(source).toString();
-  } catch (error) {}
+  } catch (error) {
+    if (error instanceof FcalError) {
+      console.info(error.info());
+    } else {
+      console.error(error);
+    }
+  }
   return p;
 }

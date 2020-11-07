@@ -33,6 +33,7 @@ function getER() {
         return getRates();
     }
     else {
+        // Updates in 6 HR
         if (Date.now() > ERValue["date"].getTime * 1000 * 60 * 60 * 12) {
             console.info(`Rates got expired: ${ERValue["date"]}`);
             return getRates();

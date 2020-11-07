@@ -11,8 +11,8 @@ Open source cross platform simple calculator
 
 ## Features
 
-- Currency
-- Units
+- Currency conversion
+- Units conversion
 - Variables
 - Functions
 
@@ -24,5 +24,5 @@ $ npm run build && npm run start
 
 ## Download
 
-- [Linux](https://github.com/5anthosh/fcal-gui/releases/download/v0.0.1/fcal_0.0.1_amd64.deb)
-- [Windows](https://github.com/5anthosh/fcal-gui/releases/download/v0.0.1/fcal.Setup.0.0.1.exe)
+- [Linux](https://www.dropbox.com/s/3nsreqouk8w52yg/fcal_0.0.1_amd64.deb?dl=1)
+- [Windows](https://www.dropbox.com/s/jib8dasmrkp6rww/Fcal%20Setup%200.0.1.exe?dl=1)

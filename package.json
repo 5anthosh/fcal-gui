@@ -8,7 +8,8 @@
     "build": "tsc -p .",
     "start": "electron app/App.js",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder --linux --windows --publish always"
+    "dist": "electron-builder --linux --windows",
+    "lint": "xo --fix"
   },
   "keywords": [],
   "author": {
@@ -21,7 +22,8 @@
     "@types/node-fetch": "^2.5.7",
     "electron": "^10.1.5",
     "electron-builder": "^22.9.1",
-    "typescript": "^4.0.5"
+    "typescript": "^4.0.5",
+    "xo": "^0.34.2"
   },
   "dependencies": {
     "fcal": "^0.4.2",
@@ -33,7 +35,9 @@
     "linux": {
       "icon": "app/build/icons/icon.png",
       "target": [
-        "deb"
+        "deb",
+        "tar.gz",
+        "pacman"
       ],
       "category": "Utility"
     },

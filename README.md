@@ -1,4 +1,4 @@
-# fcal-gui
+# Fcal⚙️
 
 Open source cross platform simple calculator
 
@@ -7,7 +7,7 @@ Open source cross platform simple calculator
 > It features a flexible expression parser with a large set of built-in units, functions and constants.
 > Inspired from [Numi](https://numi.app)
 
-![Fcal gui](https://raw.githubusercontent.com/5anthosh/fcal/assets/fcal.png)
+![Fcal gui](https://raw.githubusercontent.com/5anthosh/fcal/assets/fcal-gui.png)
 
 ## Features
 

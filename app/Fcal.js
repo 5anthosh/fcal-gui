@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fcal_1 = require("fcal");
 const Rates_1 = require("./Rates");
 function setUnitsInFcal(ratesObj) {
+    console.info("Setting currency units to fcal");
     const rates = ratesObj["rates"];
     const ID = "CURRENCY";
     const ONE = new fcal_1.Decimal(1);

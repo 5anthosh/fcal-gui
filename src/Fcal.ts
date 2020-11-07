@@ -2,6 +2,7 @@ import { Decimal, Fcal, Unit } from "fcal";
 import { getER } from "./Rates";
 
 function setUnitsInFcal(ratesObj: Object) {
+  console.info("Setting currency units to fcal");
   const rates = ratesObj["rates"];
   const ID = "CURRENCY";
   const ONE = new Decimal(1);

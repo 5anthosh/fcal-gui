@@ -42,8 +42,12 @@ expressionEL.on("change keydown paste input", function () {
 });
 expressionEL.on("keydown", (event) => {
     if (event.ctrlKey &&
-        !(event.keyCode === 67 || event.keyCode === 65 || event.keyCode === 86)) {
-        console.log(event.key, event, event.keyCode);
+        !(event.keyCode === 67 ||
+            event.keyCode === 65 ||
+            event.keyCode === 86 ||
+            event.keyCode === 88 ||
+            event.keyCode === 90 ||
+            event.keyCode === 89)) {
         event.preventDefault();
     }
 });
@@ -64,7 +68,17 @@ function generate(values, fcalEngine) {
     for (const value of values) {
         if (value instanceof HTMLElement) {
             if (value.nodeName === "DIV") {
-                generate(jquery_1.default(value).contents(), fcalEngine);
+                if (value.childNodes.length > 1) {
+                    if (jquery_1.default(value).has("div").length > 0) {
+                        generateInDIV(jquery_1.default(value).contents(), fcalEngine);
+                    }
+                    else {
+                        populateResult(getInnerText(value), fcalEngine);
+                    }
+                }
+                else {
+                    populateResult(getInnerText(value), fcalEngine);
+                }
             }
             else {
                 resultEL.append(resultView());
@@ -78,7 +92,29 @@ function generate(values, fcalEngine) {
         }
     }
 }
-function findText(el) { }
+function generateInDIV(values, fcalEngine) {
+    for (const value of values) {
+        if (value instanceof HTMLElement) {
+            if (value.nodeName === "DIV") {
+                if (jquery_1.default(value).has("div").length > 0) {
+                    generateInDIV(jquery_1.default(value).contents(), fcalEngine);
+                }
+                else {
+                    populateResult(getInnerText(value), fcalEngine);
+                }
+            }
+            else if (value.nodeName === "SPAN") {
+                populateResult(getInnerText(value), fcalEngine);
+            }
+        }
+        else if (value instanceof Text) {
+            populateResult(value, fcalEngine);
+        }
+    }
+}
+function getInnerText(value) {
+    return jquery_1.default(value).text();
+}
 function addExtraLine(value) {
     const count = Math.ceil(value.length / 41);
     for (let index = 2; index <= count; index++) {
@@ -86,7 +122,13 @@ function addExtraLine(value) {
     }
 }
 function populateResult(value, fcalEngine) {
-    const content = value.textContent;
+    let content = "";
+    if (typeof value === "string") {
+        content = value;
+    }
+    else {
+        content = value.textContent;
+    }
     if (content && content.trim().length > 0) {
         resultEL.append(evaluate(content.trim(), fcalEngine));
         addExtraLine(content);

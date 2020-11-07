@@ -10,6 +10,7 @@ function getRates(): Promise<string> {
         localStorageKeyER,
         JSON.stringify({ date: new Date(), ER: value })
       );
+      console.info(`Getting rates data from ${ERUrl}`);
       return value;
     } catch (e) {
       throw e;
@@ -31,6 +32,7 @@ export function getER(): object | Promise<string> {
     return getRates();
   } else {
     if (Date.now() > ERValue["date"].getTime * 1000 * 60 * 60 * 12) {
+      console.info(`Rates got expired: ${ERValue["date"]}`);
       return getRates();
     } else {
       return ERValue["ER"];

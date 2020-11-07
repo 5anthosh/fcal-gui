@@ -12,6 +12,7 @@ function getRates() {
         try {
             const value = await response.json();
             localStorage.setItem(constants_1.localStorageKeyER, JSON.stringify({ date: new Date(), ER: value }));
+            console.info(`Getting rates data from ${constants_1.ERUrl}`);
             return value;
         }
         catch (e) {
@@ -33,6 +34,7 @@ function getER() {
     }
     else {
         if (Date.now() > ERValue["date"].getTime * 1000 * 60 * 60 * 12) {
+            console.info(`Rates got expired: ${ERValue["date"]}`);
             return getRates();
         }
         else {

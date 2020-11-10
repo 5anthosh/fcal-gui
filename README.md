@@ -19,6 +19,7 @@ Open source cross platform simple calculator
 ## Run
 
 ```
+$ npm install
 $ npm run build && npm run start
 ```
 

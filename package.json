@@ -3,12 +3,13 @@
   "productName": "Fcal",
   "version": "0.0.1",
   "description": "Open source calculator",
-  "main": "app/App.js",
+  "main": "app/app.js",
   "scripts": {
     "build": "tsc -p .",
-    "start": "electron app/App.js",
+    "start": "electron app/app.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder --linux --windows",
+    "dist-linux": "electron-builder --linux",
     "lint": "xo --fix"
   },
   "keywords": [],

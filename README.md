@@ -25,8 +25,8 @@ $ npm run build && npm run start
 
 ## Download
 
-- Linux
-    -[Debian](https://github.com/5anthosh/fcal-gui/releases/download/v0.0.1/fcal_0.0.1_amd64.deb)
-    -[Arch](https://github.com/5anthosh/fcal-gui/releases/download/v0.0.1/fcal-0.0.1.pacman)
-    -[tar.gz](https://github.com/5anthosh/fcal-gui/releases/download/v0.0.1/fcal-0.0.1.tar.gz)
-- [Windows](https://github.com/5anthosh/fcal-gui/releases/download/v0.0.1/Fcal.Setup.0.0.1.exe)
+1. Linux
+    - [Debian](https://github.com/5anthosh/fcal-gui/releases/download/v0.0.1/fcal_0.0.1_amd64.deb)
+    - [Arch](https://github.com/5anthosh/fcal-gui/releases/download/v0.0.1/fcal-0.0.1.pacman)
+    - [tar.gz](https://github.com/5anthosh/fcal-gui/releases/download/v0.0.1/fcal-0.0.1.tar.gz)
+2. [Windows](https://github.com/5anthosh/fcal-gui/releases/download/v0.0.1/Fcal.Setup.0.0.1.exe)

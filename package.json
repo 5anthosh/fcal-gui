@@ -10,14 +10,14 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder --linux --windows",
     "dist-linux": "electron-builder --linux",
-    "lint": "xo --fix"
+    "lint": "xo"
   },
-  "keywords": [],
+  "keywords": ["fcal", "calculator", "typescript", "crossplatform", "electron-app"],
   "author": {
     "name": "Santhosh Kumar R",
     "email": "santhoshkumarr1096@gmail.com"
   },
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/jquery": "^3.5.4",
     "@types/node-fetch": "^2.5.7",

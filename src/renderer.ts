@@ -1,6 +1,6 @@
 import $ from "jquery";
 import Fcal from "./fcal";
-import { localStorageKeyExpr } from "./util";
+import { exampleOffKey, localStorageKeyExpr } from "./util";
 import { FcalError } from "fcal";
 import { remote } from "electron";
 
@@ -8,6 +8,7 @@ const expressionEL = $("#expression");
 const resultEL = $("#value");
 const closeApp = $("#close");
 const minimizeApp = $("#minimize");
+const deleteExpr = $("#delete");
 
 const expressions = [
   "radius : 23 cm",
@@ -47,6 +48,13 @@ minimizeApp.on("click", () => {
   remote.getCurrentWindow().minimize();
 });
 
+deleteExpr.on("click", () => {
+  expressionEL.empty();
+  resultEL.empty();
+  localStorage.setItem(localStorageKeyExpr, "");
+  expressionEL.focus();
+});
+
 expressionEL.on("change keydown paste input", function () {
   const expr = $(this);
   const contents = expr.contents();
@@ -73,11 +81,13 @@ expressionEL.on("keydown", (event) => {
 $(window).on("load", () => {
   let value = localStorage.getItem(localStorageKeyExpr);
   if (!value) {
-    value = defaultExpression;
+    value = !localStorage.getItem(exampleOffKey) ? defaultExpression : "";
+    localStorage.setItem(localStorageKeyExpr, value);
   }
-
   expressionEL.html(value);
+  localStorage.setItem(exampleOffKey, "true");
   main(expressionEL.contents());
+  expressionEL.focus();
 });
 
 export function reRun() {
@@ -167,9 +177,7 @@ function populateResult(
 
 function resultView(): HTMLParagraphElement {
   const p = document.createElement("p");
-  p.style.marginTop = "0px";
-  p.style.marginBottom = "0px";
-  p.style.height = "19px";
+  p.classList.add("ResultUnit");
   return p;
 }
 

@@ -23,7 +23,9 @@ export default class Main {
       icon: path.join(__dirname, "build", "icons", "icon.png"),
     });
     //Main.mainWindow.setMenu(null);
-    Main.mainWindow.webContents.loadFile(__dirname + "/index.html");
+    Main.mainWindow.webContents.loadFile(
+      path.join(__dirname, "static", "index.html")
+    );
     Main.mainWindow.on("closed", Main.onClose);
   }
 

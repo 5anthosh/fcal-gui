@@ -2,9 +2,12 @@ import $ from "jquery";
 import Fcal from "./fcal";
 import { localStorageKeyExpr } from "./util";
 import { FcalError } from "fcal";
+import { remote } from "electron";
 
 const expressionEL = $("#expression");
 const resultEL = $("#value");
+const closeApp = $("#close");
+const minimizeApp = $("#minimize");
 
 const expressions = [
   "radius : 23 cm",
@@ -34,6 +37,14 @@ expressionEL.on("focusout", function () {
   if (!element.text().trim().length) {
     element.empty();
   }
+});
+
+closeApp.on("click", () => {
+  remote.getCurrentWindow().close();
+});
+
+minimizeApp.on("click", () => {
+  remote.getCurrentWindow().minimize();
 });
 
 expressionEL.on("change keydown paste input", function () {

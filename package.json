@@ -12,7 +12,13 @@
     "dist-linux": "electron-builder --linux",
     "lint": "xo"
   },
-  "keywords": ["fcal", "calculator", "typescript", "crossplatform", "electron-app"],
+  "keywords": [
+    "fcal",
+    "calculator",
+    "typescript",
+    "crossplatform",
+    "electron-app"
+  ],
   "author": {
     "name": "Santhosh Kumar R",
     "email": "santhoshkumarr1096@gmail.com"

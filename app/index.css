@@ -3,33 +3,7 @@
         font-family: monospace;
         display: grid;
         margin-left: 20px;
-        grid-template-columns: 250px 500px;
-        grid-template-rows: 100%;
-        grid-column-gap: 25px;
-        grid-row-gap: px;
     }
-/* 
-    #save {
-        background: #6aa84f;
-        border-radius: 5px;
-        padding: 8px 20px;
-        color: #ffffff;
-        display: inline-block;
-        font: normal bold 16px/1 "Ubuntu",
-            sans-serif;
-        text-align: center;
-    }
-
-    #default {
-        background: #3d85c6;
-        border-radius: 5px;
-        padding: 8px 20px;
-        color: #ffffff;
-        display: inline-block;
-        font: normal bold 16px/1 "Ubuntu",
-            sans-serif;
-        text-align: center;
-    } */
 
     .input {
         color: #ffd631;
@@ -46,11 +20,15 @@
         font-family: monospace;
     }
 
+
     .grid-container {
         display: grid;
         grid-template-columns: 1fr;
-        grid-template-rows: 1fr;
-        grid-template-areas: "Toolbar""Body";
+        grid-template-rows: 50px 1fr;
+        gap: 0px 0px;
+        grid-template-areas:
+            "Toolbar"
+            "Body";
     }
 
     .Toolbar {
@@ -61,8 +39,32 @@
         display: grid;
         grid-template-columns: 400px 1fr;
         grid-template-rows: 1fr;
-        grid-template-areas: "Expression resultValues";
+        gap: px px;
+        grid-template-areas:
+            "Expression ResultView";
         grid-area: Body;
+    }
+
+    .Expression {
+        grid-area: Expression;
+    }
+
+    .ResultView {
+        grid-area: ResultView;
+         color: #00ff76;
+    }
+
+    .settings {
+        background-image: url('./static/settings.svg');
+    }
+
+    .minimize {
+        padding-right: 12px;
+        background-image: url('./static/minimize.svg');
+    }
+
+    .close {
+        background-image: url('./static/close.svg');
     }
 
     [placeholder]:empty::before {
@@ -74,10 +76,36 @@
         content: "";
     }
 
-    .resultValues {
-        color: #00ff76;
-    }
 
     .WholeWindow {
         background-color: #202646;
     }
+
+    .icon {
+        cursor: pointer;
+        opacity: 0.5;
+        display: inline-block;
+        background-repeat: no-repeat;
+        background-size: 12px;
+        background-position: bottom;
+        width: 12px;
+        height: 12px;
+        filter: invert(98%) sepia(3%) saturate(167%) hue-rotate(326deg) brightness(118%) contrast(100%);
+    }
+
+
+    .bar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 16px;
+    }
+
+    .title {
+        font-size: 0.75rem;
+        margin: 0;
+        text-align: center;
+        color: white;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+    }
+

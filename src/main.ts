@@ -16,13 +16,13 @@ export default class Main {
   private static onReady() {
     Main.mainWindow = new Main.BrowserWindow({
       width: 800,
-      height: 600,
+      height: 800,
       resizable: false,
-      frame: true,
-      webPreferences: { nodeIntegration: true },
+      frame: false,
+      webPreferences: { nodeIntegration: true, enableRemoteModule: true },
       icon: path.join(__dirname, "build", "icons", "icon.png"),
     });
-    // Main.mainWindow.setMenu(null);
+    //Main.mainWindow.setMenu(null);
     Main.mainWindow.webContents.loadFile(__dirname + "/index.html");
     Main.mainWindow.on("closed", Main.onClose);
   }

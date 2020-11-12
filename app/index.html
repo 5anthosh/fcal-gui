@@ -10,8 +10,20 @@
   </head>
 
   <body class="WholeWindow">
-    <div class="grid-container parent">
-      <div class="Body">
+    <div class="grid-container">
+      <div class="Toolbar">
+        <div class="bar">
+          <div class="controls">
+            <!-- <i id="settings" class="icon settings"></i> -->
+          </div>
+          <!-- <h1 class="title">FCAL</h1> -->
+          <div class="controls">
+            <i id="minimize" class="icon minimize"></i>
+            <i id="close" class="icon close"></i>
+          </div>
+        </div>
+      </div>
+      <div class="Body parent">
         <div class="Expression">
           <div
             id="expression"
@@ -22,7 +34,7 @@
             contenteditable
           ></div>
         </div>
-        <div class="resultValues">
+        <div class="ResultView">
           <div id="value"></div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 {
   "name": "fcal",
   "productName": "Fcal",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Open source calculator",
   "main": "app/app.js",
   "scripts": {
@@ -44,7 +44,8 @@
       "target": [
         "deb",
         "tar.gz",
-        "pacman"
+        "pacman",
+        "AppImage,"
       ],
       "category": "Utility"
     },

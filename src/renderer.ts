@@ -78,11 +78,13 @@ export function reRun() {
 function main(values: NodeListOf<ChildNode>) {
   const fcalEngine = new Fcal();
   const expressions = generate(values);
+  console.log(expressions);
   populateResult(expressions, fcalEngine);
 }
 
 function generate(values: NodeListOf<ChildNode>): Array<string> {
   const expressions = Array<string>();
+  console.log(values);
   values.forEach((value) => {
     if (value instanceof HTMLElement) {
       if (value.nodeName === "DIV") {
@@ -198,6 +200,7 @@ function resultView(source?: string | null, fcalEngine?: Fcal): HTMLElement {
 function createParagraphElement(): HTMLParagraphElement {
   const p = document.createElement("p");
   p.style.marginTop = "0px";
+  p.style.height = "19px";
   p.style.marginBottom = "0px";
   return p;
 }

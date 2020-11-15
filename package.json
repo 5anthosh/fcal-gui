@@ -5,9 +5,8 @@
   "description": "Open source calculator",
   "main": "app/app.js",
   "scripts": {
-    "build": "tsc -p .",
+    "build": "tsc -p . && browserify -p tinyify app/renderer.js > app/static/dist.js",
     "start": "electron app/app.js",
-    "browser": "browserify -p tinyify app/renderer.js > app/static/dist.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder --linux --windows",
     "dist-linux": "electron-builder --linux",

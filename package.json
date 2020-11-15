@@ -6,6 +6,7 @@
   "main": "app/app.js",
   "scripts": {
     "build": "tsc -p .",
+    "browser": "browserify -p tinyify app/renderer.js > app/compressed.js",
     "start": "electron app/app.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder --linux --windows",
@@ -25,17 +26,15 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/jquery": "^3.5.4",
-    "@types/node-fetch": "^2.5.7",
+    "browserify": "^17.0.0",
     "electron": "^10.1.5",
     "electron-builder": "^22.9.1",
+    "tinyify": "^3.0.0",
     "typescript": "^4.0.5",
     "xo": "^0.34.2"
   },
   "dependencies": {
-    "fcal": "^0.4.2",
-    "jquery": "^3.5.1",
-    "node-fetch": "^2.6.1"
+    "fcal": "^0.4.2"
   },
   "build": {
     "appId": "com.santhosh.fcal",

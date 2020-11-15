@@ -1,5 +1,4 @@
 import { Decimal, Fcal, Unit } from "fcal";
-import { FetchError } from "node-fetch";
 import { getER, ER, Rates } from "./rates";
 import { reRun } from "./renderer";
 
@@ -71,15 +70,10 @@ function setERUnits() {
         reRun();
       },
       (error: Error) => {
-        if (error instanceof FetchError) {
-          if (error.code && error.code === "EAI_AGAIN") {
-            alert(
-              `Could not get currency rates, so currency conversion is disabled.
+        alert(
+          `Could not get currency rates, so currency conversion is disabled.
 Check your internet connection`
-            );
-          }
-        }
-
+        );
         console.error(error);
       }
     );

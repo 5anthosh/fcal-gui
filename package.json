@@ -6,6 +6,7 @@
   "main": "app/app.js",
   "scripts": {
     "build": "tsc -p . && browserify -p tinyify app/renderer.js > app/static/dist.js",
+    "devbuild": "tsc -p . && browserify --debug app/renderer.js > app/static/dist.js",
     "start": "electron app/app.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder --linux --windows",

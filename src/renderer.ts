@@ -2,6 +2,13 @@ import Fcal from "./fcal";
 import { exampleOffKey, localStorageKeyExpr } from "./util";
 import { FcalError } from "fcal";
 
+interface ExpressionValueMap {
+  expression: string;
+  value: string;
+}
+let OldValueCache: Array<ExpressionValueMap>;
+let CurrentValueCache: Array<ExpressionValueMap> = new Array();
+
 const expressionEL = document.getElementById("expression")!;
 const resultEL = document.getElementById("value")!;
 const empty = "";
@@ -29,7 +36,7 @@ const defaultExpression = (() => {
   return value;
 })();
 
-["change", "keydown", "paste", "input"].forEach((evt) => {
+["change", "paste", "input"].forEach((evt) => {
   expressionEL.addEventListener(evt, function (this: HTMLElement) {
     const contents = this.childNodes;
     localStorage.setItem(localStorageKeyExpr, this.innerHTML);
@@ -53,8 +60,10 @@ expressionEL.addEventListener("keydown", (event) => {
   }
 
   if (event.ctrlKey && event.keyCode === 86) {
-    console.log("CTR+v");
-    console.log(generate(expressionEL.childNodes));
+    setTimeout(function () {
+      rewriteExpressionsBoard();
+      setCursorAtEnd();
+    }, 0);
   }
 });
 
@@ -67,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
   expressionEL.innerHTML = value;
   localStorage.setItem(exampleOffKey, "true");
   main(expressionEL.childNodes);
-  expressionEL.focus();
+  setCursorAtEnd();
 });
 
 export function reRun() {
@@ -78,13 +87,13 @@ export function reRun() {
 function main(values: NodeListOf<ChildNode>) {
   const fcalEngine = new Fcal();
   const expressions = generate(values);
-  console.log(expressions);
   populateResult(expressions, fcalEngine);
+  OldValueCache = CurrentValueCache;
+  clearCache();
 }
 
 function generate(values: NodeListOf<ChildNode>): Array<string> {
   const expressions = Array<string>();
-  console.log(values);
   values.forEach((value) => {
     if (value instanceof HTMLElement) {
       if (value.nodeName === "DIV") {
@@ -132,8 +141,22 @@ function jumpInDIv(expressions: Array<string>, value: HTMLElement) {
 
 function populateResult(expressions: Array<string>, fcalEngine: Fcal) {
   resultEL.innerHTML = "";
-  for (const expr of expressions) {
-    populateResultUnit(expr, fcalEngine);
+  let isChanged = false;
+  for (let index = 0; index < expressions.length; index++) {
+    const source = expressions[index];
+    if (
+      !isChanged &&
+      OldValueCache &&
+      OldValueCache.length > index &&
+      OldValueCache[index].expression.trim() === source.trim()
+    ) {
+      resultEL.appendChild(resultView(OldValueCache[index].value));
+      setCache(source, OldValueCache[index].value);
+      addExtraLine(source);
+    } else {
+      isChanged = true;
+      populateResultUnit(source, fcalEngine);
+    }
   }
 }
 
@@ -177,20 +200,31 @@ function addExtraLine(value: string) {
   }
 }
 
-function populateResultUnit(value: string, fcalEngine: Fcal) {
-  if (value.trim().length > 0) {
-    resultEL.append(resultView(value.trim(), fcalEngine));
-  } else {
-    resultEL.append(resultView());
-  }
-  addExtraLine(value);
+function setCache(expression: string, value: string) {
+  CurrentValueCache.push({ expression, value });
 }
 
-function resultView(source?: string | null, fcalEngine?: Fcal): HTMLElement {
+function clearCache() {
+  CurrentValueCache = [];
+}
+
+function populateResultUnit(source: string, fcalEngine: Fcal) {
+  if (source.trim().length > 0) {
+    const value = evaluate(source, fcalEngine);
+    setCache(source, value);
+    resultEL.append(resultView(value));
+  } else {
+    setCache(source, empty);
+    resultEL.append(resultView());
+  }
+  addExtraLine(source);
+}
+
+function resultView(value?: string): HTMLElement {
   const d = document.createElement("div");
   const p = createParagraphElement();
-  if (source && fcalEngine) {
-    p.textContent = evaluate(source, fcalEngine);
+  if (value) {
+    p.textContent = value;
   }
   d.appendChild(p);
   d.classList.add("ResultUnit");
@@ -205,7 +239,27 @@ function createParagraphElement(): HTMLParagraphElement {
   return p;
 }
 
+function setCursorAtEnd() {
+  expressionEL.focus();
+  if (
+    typeof window.getSelection != "undefined" &&
+    typeof document.createRange != "undefined"
+  ) {
+    var range = document.createRange();
+    range.selectNodeContents(expressionEL);
+    range.collapse(false);
+    var sel = window.getSelection();
+    sel?.removeAllRanges();
+    sel?.addRange(range);
+  }
+}
+
 function evaluate(source: string, fcalEngine: Fcal): string {
+  const value = evaluateExpression(source, fcalEngine);
+  return value;
+}
+
+function evaluateExpression(source: string, fcalEngine: Fcal): string {
   if (source.trim().length === 0) {
     return empty;
   }
@@ -215,6 +269,7 @@ function evaluate(source: string, fcalEngine: Fcal): string {
     return result;
   } catch (error) {
     if (error instanceof FcalError) {
+      console.trace();
       console.info(error.info());
     } else {
       console.error(error);

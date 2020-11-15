@@ -1,5 +1,4 @@
 import { ERUrl, localStorageKeyER, noOfHrToExpireER } from "./util";
-import fetch from "node-fetch";
 
 export interface Rates {
   CAD: number;
@@ -48,22 +47,30 @@ interface ERData {
   ER: ER;
 }
 
-function getRates(): Promise<ER> {
-  return (async () => {
-    const response = await fetch(ERUrl);
-    try {
-      const value = await response.json();
-      localStorage.setItem(
-        localStorageKeyER,
-
-        JSON.stringify({ date: Date.now(), ER: value })
-      );
-      console.info(`Getting rates data from ${ERUrl}`);
-      return value as ER;
-    } catch (error) {
-      throw error;
-    }
-  })();
+export function getRates(): Promise<ER> {
+  return new Promise(function (
+    resolve: (value: ER) => void,
+    reject: (reason: Error) => void
+  ) {
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("GET", ERUrl);
+    xhttp.onload = () => {
+      if (xhttp.status == 200) {
+        localStorage.setItem(
+          localStorageKeyER,
+          JSON.stringify({
+            date: Date.now(),
+            ER: JSON.parse(xhttp.response),
+          })
+        );
+        resolve(JSON.parse(xhttp.response) as ER);
+      } else {
+        reject(new Error(xhttp.statusText));
+      }
+    };
+    xhttp.onerror = () => reject(new Error(xhttp.statusText));
+    xhttp.send();
+  });
 }
 
 function getERFromLocalStorage(): ERData | null {

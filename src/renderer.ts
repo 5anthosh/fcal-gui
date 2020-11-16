@@ -9,6 +9,7 @@ interface ExpressionValueMap {
 let OldValueCache: Array<ExpressionValueMap>;
 let CurrentValueCache: Array<ExpressionValueMap> = new Array();
 
+const fcal = new Fcal();
 const expressionEL = document.getElementById("expression")!;
 const resultEL = document.getElementById("value")!;
 const empty = "";
@@ -85,9 +86,8 @@ export function reRun() {
 }
 
 function main(values: NodeListOf<ChildNode>) {
-  const fcalEngine = new Fcal();
   const expressions = generate(values);
-  populateResult(expressions, fcalEngine);
+  populateResult(expressions);
   OldValueCache = CurrentValueCache;
   clearCache();
 }
@@ -139,7 +139,7 @@ function jumpInDIv(expressions: Array<string>, value: HTMLElement) {
   }
 }
 
-function populateResult(expressions: Array<string>, fcalEngine: Fcal) {
+function populateResult(expressions: Array<string>) {
   resultEL.innerHTML = "";
   let isChanged = false;
   for (let index = 0; index < expressions.length; index++) {
@@ -155,7 +155,7 @@ function populateResult(expressions: Array<string>, fcalEngine: Fcal) {
       addExtraLine(source);
     } else {
       isChanged = true;
-      populateResultUnit(source, fcalEngine);
+      populateResultUnit(source);
     }
   }
 }
@@ -208,9 +208,9 @@ function clearCache() {
   CurrentValueCache = [];
 }
 
-function populateResultUnit(source: string, fcalEngine: Fcal) {
+function populateResultUnit(source: string) {
   if (source.trim().length > 0) {
-    const value = evaluate(source, fcalEngine);
+    const value = evaluate(source);
     setCache(source, value);
     resultEL.append(resultView(value));
   } else {
@@ -254,12 +254,12 @@ function setCursorAtEnd() {
   }
 }
 
-function evaluate(source: string, fcalEngine: Fcal): string {
-  const value = evaluateExpression(source, fcalEngine);
+function evaluate(source: string): string {
+  const value = evaluateExpression(source);
   return value;
 }
 
-function evaluateExpression(source: string, fcalEngine: Fcal): string {
+function evaluateExpression(source: string): string {
   if (source.trim().length === 0) {
     return empty;
   }
@@ -268,7 +268,7 @@ function evaluateExpression(source: string, fcalEngine: Fcal): string {
     source = source
       .trim()
       .replace(new RegExp(String.fromCharCode(160), "g"), " ");
-    const result = fcalEngine.evaluate(source.trim()).toString();
+    const result = fcal.evaluate(source.trim()).toString();
     return result;
   } catch (error) {
     if (error instanceof FcalError) {

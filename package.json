@@ -1,12 +1,16 @@
 {
   "name": "fcal",
   "productName": "Fcal",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Open source calculator",
   "main": "app/app.js",
   "scripts": {
-    "build": "tsc -p . && browserify -p tinyify app/renderer.js > app/static/dist.js",
+    "build": "tsc -p . && browserify -p tinyify app/renderer.js > app/static/dist.js && npm run gobuild",
+    "gobuild": "go run ./generate/generate.go && go build -o dist/fcal",
     "devbuild": "tsc -p . && browserify --debug app/renderer.js > app/static/dist.js",
+    "macos-gobuild": "./bin/build-macos.sh",
+    "win-gobuild": "./bin/build-windows.bat",
+    "linux-gobuild": "./bin/build-linux.sh",
     "start": "electron app/app.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder --linux --windows",

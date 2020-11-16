@@ -265,10 +265,15 @@ function evaluateExpression(source: string, fcalEngine: Fcal): string {
   }
 
   try {
-    const result = fcalEngine.evaluate(source).toString();
+    source = source
+      .trim()
+      .replace(new RegExp(String.fromCharCode(160), "g"), " ");
+    const result = fcalEngine.evaluate(source.trim()).toString();
     return result;
   } catch (error) {
     if (error instanceof FcalError) {
+      console.log(Fcal.getTokensForExpression("234234 +  34234"));
+      console.log(`Source: [${source.trim()}]`);
       console.trace();
       console.info(error.info());
     } else {

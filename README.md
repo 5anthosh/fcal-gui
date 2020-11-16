@@ -16,11 +16,38 @@ Open source cross platform simple calculator
 - Variables
 - Functions
 
-## Run
+## Run 
 
-```
+#### Electron 
+
+```sh
 $ npm install
 $ npm run build && npm run start
+```
+#### Chrome and Golang
+
+```sh
+$ npm install
+$ npm run build
+$ npm run gobuild
+$ ./dist/fcal
+```
+## Build
+
+#### Electron
+```sh
+$ npm install
+$ npm run build
+$ npm run dist
+```
+#### Chrome and Golang
+
+```sh
+$ npm install
+$ npm run gobuild
+$ ./bin/build-linux.sh #Linux debian
+$ ./bin/build-windows.bat # Windows
+$ ./bin/build-macos.sh # Macos
 ```
 
 ## Download
@@ -30,3 +57,5 @@ $ npm run build && npm run start
     - [Arch](https://github.com/5anthosh/fcal-gui/releases/download/v0.0.1/fcal-0.0.1.pacman)
     - [tar.gz](https://github.com/5anthosh/fcal-gui/releases/download/v0.0.1/fcal-0.0.1.tar.gz)
 2. [Windows](https://github.com/5anthosh/fcal-gui/releases/download/v0.0.1/Fcal.Setup.0.0.1.exe)
+
+3. [Web](https://fca1.netlify.app)

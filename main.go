@@ -5,50 +5,32 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"os"
-	"os/signal"
-	"runtime"
 
 	"github.com/5anthosh/fcal-gui/assets"
-	"github.com/zserge/lorca"
+	"github.com/webview/webview"
 )
 
+const webaddress = "127.0.0.1:43293"
+
 func main() {
-	args := []string{}
-	if runtime.GOOS == "linux" {
-		args = append(args, "--class=Lorca")
-	}
-	dir, err := os.UserHomeDir()
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Config folder : " + dir + "/.config/fcal-gui")
-	ui, err := lorca.New("", dir+"/.config/fcal", 800, 800, args...)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer ui.Close()
-
-	// A simple way to know when UI is ready (uses body.onload event in JS)
-	ui.Bind("start", func() {
-		log.Println("UI is ready")
-	})
-
-	ln, err := net.Listen("tcp", "127.0.0.1:43293")
-	if err != nil {
-		log.Fatal(err)
-	}
+	ln := startWebServer()
+	addr := fmt.Sprintf("http://%s", ln.Addr())
+	log.Println(fmt.Sprintf("Starting Server at : %s", addr))
 	defer ln.Close()
-	go http.Serve(ln, http.FileServer(assets.FS))
-	ui.Load(fmt.Sprintf("http://%s", ln.Addr()))
+	debug := true
+	w := webview.New(debug)
+	defer w.Destroy()
+	w.SetTitle("Fcal")
+	w.SetSize(800, 800, webview.HintNone)
+	w.Navigate(addr)
+	w.Run()
+}
 
-	// Wait until the interrupt signal arrives or browser window is closed
-	sigc := make(chan os.Signal)
-	signal.Notify(sigc, os.Interrupt)
-	select {
-	case <-sigc:
-	case <-ui.Done():
+func startWebServer() net.Listener {
+	ln, err := net.Listen("tcp", webaddress)
+	if err != nil {
+		log.Fatal(err)
 	}
-
-	log.Println("exiting...")
+	go http.Serve(ln, http.FileServer(assets.FS))
+	return ln
 }

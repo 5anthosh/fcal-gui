@@ -1,0 +1,1 @@
+env GOOS=windows GOARCH=amd64 go build -o dist/fcal.0.0.1-chrome.exe main.go

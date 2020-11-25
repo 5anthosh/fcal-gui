@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"runtime"
 
 	"github.com/5anthosh/fcal-gui/assets"
@@ -22,8 +23,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Config folder : " + dir + "/.config/fcal-gui")
-	ui, err := lorca.New("", dir+"/.config/fcal", 800, 800, args...)
+	configPath := filepath.Join(dir, ".config", "fcal-gui")
+	log.Println("Config folder : " + configPath)
+	ui, err := lorca.New("", configPath, 800, 800, args...)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -88,7 +88,7 @@ export function getER(): ER | Promise<ER> {
     return getRates();
   }
 
-  if (Date.now() > ERValue.timestamp * 1000 * 60 * 60 * noOfHrToExpireER) {
+  if (Date.now() > ERValue.timestamp + 1000 * 60 * 60 * noOfHrToExpireER) {
     console.info(`Rates got expired: ${new Date(ERValue.timestamp)}`);
     return getRates();
   }

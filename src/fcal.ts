@@ -67,6 +67,7 @@ function setERUnits() {
       (value: ER) => {
         console.log(value);
         setUnitsInFcal(value);
+        console.info("Re-running the fcal eval");
         reRun();
       },
       (error: Error) => {

@@ -29,7 +29,7 @@ Version: 0.0.2
 Section: base
 Priority: optional
 Architecture: amd64
-Depends: libgtk, libwebkit2gtk
+Depends: libwebkit2gtk-4.0-37
 Maintainer: Santhosh Kumar R <santhoshkumarr1096@gmail.com>
 Description: Calculator
 EOF

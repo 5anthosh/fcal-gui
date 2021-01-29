@@ -7,7 +7,6 @@ import (
 	"net"
 	"net/http"
 
-
 	"github.com/webview/webview"
 )
 
@@ -21,8 +20,12 @@ func main() {
 	addr := fmt.Sprintf("http://%s/app/static", ln.Addr())
 	log.Println(fmt.Sprintf("Starting Server at : %s", addr))
 	defer ln.Close()
-	debug := false
 
+	debug := false
+	startWebView(addr, debug)
+}
+
+func startWebView(addr string, debug bool) {
 	w := webview.New(debug)
 	defer w.Destroy()
 	w.SetTitle("Fcal")

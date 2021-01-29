@@ -1,6 +1,6 @@
 import Fcal from "./fcal";
 import { exampleOffKey, localStorageKeyExpr } from "./util";
-import { FcalError } from "fcal";
+import { FcalError, Decimal, Type } from "fcal";
 
 interface ExpressionValueMap {
   expression: string;
@@ -10,6 +10,9 @@ let OldValueCache: Array<ExpressionValueMap>;
 let CurrentValueCache: Array<ExpressionValueMap> = new Array();
 
 const fcal = new Fcal();
+fcal.setStrict(true);
+
+
 const expressionEL = document.getElementById("expression")!;
 const resultEL = document.getElementById("value")!;
 const empty = "";
@@ -268,7 +271,13 @@ function evaluateExpression(source: string): string {
     source = source
       .trim()
       .replace(new RegExp(String.fromCharCode(160), "g"), " ");
-    const result = fcal.evaluate(source.trim()).toString();
+      const val =  fcal.evaluate(source)
+      let result = "";
+      if ((val as Type.Numeric).n.e <= Decimal.toExpPos) {
+        result = val.toFormat();
+      } else {
+        result =  val.toString();
+      }
     return result;
   } catch (error) {
     if (error instanceof FcalError) {

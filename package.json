@@ -27,6 +27,6 @@
     "typescript": "^4.1.3"
   },
   "dependencies": {
-    "fcal": "^0.4.2"
+    "fcal": "^0.4.3"
   }
 }

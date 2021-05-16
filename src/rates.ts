@@ -1,4 +1,10 @@
-import { ERUrl, localStorageKeyER, noOfHrToExpireER } from "./util";
+import {
+  ERUrl,
+  localStorageKeyER,
+  localStorageKeyVersion,
+  noOfHrToExpireER,
+  version,
+} from "./util";
 
 export interface Rates {
   CAD: number;
@@ -43,7 +49,7 @@ export interface ER {
 }
 
 interface ERData {
-  timestamp: number;
+  date: number;
   ER: ER;
 }
 
@@ -56,14 +62,19 @@ export function getRates(): Promise<ER> {
     xhttp.open("GET", ERUrl);
     xhttp.onload = () => {
       if (xhttp.status == 200) {
-        localStorage.setItem(
-          localStorageKeyER,
-          JSON.stringify({
-            date: Date.now(),
-            ER: JSON.parse(xhttp.response),
-          })
-        );
-        resolve(JSON.parse(xhttp.response) as ER);
+        const ER = JSON.parse(xhttp.response);
+        if (ER && !ER["error"]) {
+          localStorage.setItem(
+            localStorageKeyER,
+            JSON.stringify({
+              date: Date.now(),
+              ER: JSON.parse(xhttp.response),
+            })
+          );
+          resolve(JSON.parse(xhttp.response) as ER);
+        } else {
+          reject(new Error(xhttp.statusText));
+        }
       } else {
         reject(new Error(xhttp.statusText));
       }
@@ -75,11 +86,15 @@ export function getRates(): Promise<ER> {
 
 function getERFromLocalStorage(): ERData | null {
   const ERValue = localStorage.getItem(localStorageKeyER);
-  if (!ERValue) {
+  const versionValue = localStorage.getItem(localStorageKeyVersion);
+  if (!ERValue || !versionValue) {
     return null;
   }
 
-  return JSON.parse(ERValue);
+  if (versionValue === version) {
+    return JSON.parse(ERValue);
+  }
+  return null;
 }
 
 export function getER(): ER | Promise<ER> {
@@ -88,8 +103,8 @@ export function getER(): ER | Promise<ER> {
     return getRates();
   }
 
-  if (Date.now() > ERValue.timestamp + 1000 * 60 * 60 * noOfHrToExpireER) {
-    console.info(`Rates got expired: ${new Date(ERValue.timestamp)}`);
+  if (Date.now().valueOf() > ERValue.date + 1000 * 60 * 60 * noOfHrToExpireER) {
+    console.info(`Rates got expired: ${new Date(ERValue.date)}`);
     return getRates();
   }
 

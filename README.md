@@ -7,6 +7,8 @@ Open source simple calculator
 > It features a flexible expression parser with a large set of built-in units, functions and constants.
 > Inspired from [Numi](https://numi.app)
 
+[Download](https://github.com/5anthosh/fcal-gui/releases)
+
 ![Fcal gui](https://raw.githubusercontent.com/5anthosh/fcal/assets/fcal-gui.png)
 
 ## Features
@@ -14,7 +16,7 @@ Open source simple calculator
 - Currency conversion
 - Units conversion
 - Variables
-- Functions
+- Functions 
 
 ## Run
 

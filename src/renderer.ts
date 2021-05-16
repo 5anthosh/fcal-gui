@@ -85,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 export function reRun() {
   const contents = expressionEL.childNodes;
+  OldValueCache = [];
   main(contents);
 }
 

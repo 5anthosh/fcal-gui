@@ -1,14 +1,14 @@
 #!/bin/sh
 
 APP=fcal
-APPDIR=dist/${APP}_0.0.2
+APPDIR=dist/${APP}_0.0.3
 
 mkdir -p $APPDIR/usr/bin
 mkdir -p $APPDIR/usr/share/applications
 mkdir -p $APPDIR/usr/share/icons/hicolor/256x256/apps
 mkdir -p $APPDIR/DEBIAN
 
-go1.16beta1 build -o $APPDIR/usr/bin/$APP
+go build -o $APPDIR/usr/bin/$APP
 
 cp app/build/icons/icon.png $APPDIR/usr/share/icons/hicolor/256x256/apps/${APP}.png
 
@@ -25,7 +25,7 @@ EOF
 
 cat > $APPDIR/DEBIAN/control << EOF
 Package: ${APP}
-Version: 0.0.2
+Version: 0.0.3
 Section: base
 Priority: optional
 Architecture: amd64

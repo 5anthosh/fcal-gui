@@ -12,8 +12,8 @@ let CurrentValueCache: Array<ExpressionValueMap> = new Array();
 const fcal = new Fcal();
 fcal.setStrict(true);
 
-
 const expressionEL = document.getElementById("expression")!;
+expressionEL.spellcheck = false;
 const resultEL = document.getElementById("value")!;
 const empty = "";
 
@@ -271,13 +271,16 @@ function evaluateExpression(source: string): string {
     source = source
       .trim()
       .replace(new RegExp(String.fromCharCode(160), "g"), " ");
-      const val =  fcal.evaluate(source)
-      let result = "";
-      if ((val as Type.Numeric).n.e <= Decimal.toExpPos) {
-        result = val.toFormat();
-      } else {
-        result =  val.toString();
-      }
+    const val = fcal.evaluate(source);
+    let result = "";
+    if (
+      (val as Type.Numeric).n.e <= Decimal.toExpPos &&
+      (val as Type.Numeric).ns.name === "Decimal"
+    ) {
+      result = val.toFormat();
+    } else {
+      result = val.toString();
+    }
     return result;
   } catch (error) {
     if (error instanceof FcalError) {
